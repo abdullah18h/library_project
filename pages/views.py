@@ -4,19 +4,36 @@ from django.shortcuts import render
 
 from .models import *
 
+from .forms import BookForm
+
 def index (request):
+
+
+    if request.method == 'POST':
+        add_book = BookForm(request.POST, request.FILES)
+        add_book.save()
+        if add_book.is_valid():
+            add_book.save()
+
+
 
     context ={
         'book': Book.objects.all(),
         'category': Category.objects.all(),
+        'form': BookForm()
     }
 
     return render(request, 'pages\index.html', context)
 
 
 def book(request):
+    context ={
+        'book': Book.objects.all(),
+        'category': Category.objects.all(),
+    }
 
-    return render(request, r'pages\books.html')
+
+    return render(request, r'pages\books.html', context)
 
 
 def update (request):
